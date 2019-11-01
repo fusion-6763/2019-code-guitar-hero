@@ -83,8 +83,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    hatchState = HatchState.IN;
-    hatchIntake.set(hatchState);
+    initStuffs();
   }
 
   /**
@@ -92,15 +91,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      break;
-    }
+    periodicStuffs();
+  }
+
+  @Override
+  public void teleopInit(){
+    initStuffs();
   }
 
   /**
@@ -108,6 +104,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    periodicStuffs();
   }
 
   /**
@@ -121,26 +118,68 @@ public class Robot extends TimedRobot {
     double zSpeed = 0.0;
     double ySpeed = 0.0;
 
+    double magicSpeed = 0.6;
+
     if(guitar.getRawAxis(1) == 1.0){
-      zSpeed = 0.5;
+      zSpeed = magicSpeed;
     }
     else if(guitar.getRawAxis(1) == -1.0){
-      zSpeed = -0.5;
+      zSpeed = -magicSpeed;
     }
     else{
       zSpeed = 0.0;
     }
 
     if(guitar.getRawButton(1)){
-      ySpeed = -0.5;
+      ySpeed = -magicSpeed;
     }
     else if(guitar.getRawButton(6)){
-      ySpeed = 0.5;
+      ySpeed = magicSpeed;
     }
     else{
       ySpeed = 0.0;
     }
 
     myRobot.arcadeDrive(zSpeed, ySpeed);
+
+    // Hatch stuff
+    if(guitar.getRawAxis(3) > 0.5){
+      hatchState = HatchState.OUT;
+      hatchIntake.set(hatchState);
+    }
+    else{
+      hatchState = HatchState.IN;
+      hatchIntake.set(hatchState);
+    }
+    SmartDashboard.putBoolean("hatchOut", hatchState == HatchState.OUT ? true : false);
+
+    // Cargo
+    if(guitar.getRawButton(4)){
+      cargoIntake.outtake();
+    }
+    else if(guitar.getRawButton(2)){
+      cargoIntake.intake();
+    }
+    else{
+      cargoIntake.normal();
+    }
+
+    // Elevator
+    if(guitar.getRawButton(3)){
+      elevator.moveUp();
+    }
+    else if(guitar.getRawButton(5)){
+      elevator.moveDown();
+    }
+    else{
+      elevator.stop();
+    }
+  }
+
+  private void initStuffs(){
+    hatchState = HatchState.IN;
+    hatchIntake.set(hatchState);
+
+    SmartDashboard.putBoolean("hatchOut", false);
   }
 }
