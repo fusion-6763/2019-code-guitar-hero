@@ -32,16 +32,16 @@ public class Elevator {
      * Move the elevator up at full speed.
      */
     public void moveUp(){
-        motor1.set(0.6);
-        motor2.set(0.6);
+        motor1.set(0.8);
+        motor2.set(0.8);
     }
 
     /**
      * Move the elevator down at full speed.
      */
     public void moveDown(){
-        motor1.set(-0.6);
-        motor2.set(-0.6);
+        motor1.set(-0.8);
+        motor2.set(-0.8);
     }
 
     /**

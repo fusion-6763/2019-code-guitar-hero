@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
     double zSpeed = 0.0;
     double ySpeed = 0.0;
 
-    double magicSpeed = 0.6;
+    double magicSpeed = 0.8;
 
     if(guitar.getRawAxis(1) == 1.0){
       zSpeed = magicSpeed;
