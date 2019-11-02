@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
   private void periodicStuffs(){
     double zSpeed = 0.0;
     double ySpeed = 0.0;
-    System.out.println(driverGuitar.getPOV(0));
     double magicSpeed = 0.8;
     if(driverGuitar.getPOV(0) == 180.0){
       zSpeed = magicSpeed;
@@ -166,10 +165,10 @@ public class Robot extends TimedRobot {
     }
 
     // Elevator
-    if(controllerGuitar.getRawButton(3)){
+    if(controllerGuitar.getRawAxis(1) == 0.0){
       elevator.moveUp();
     }
-    else if(controllerGuitar.getRawButton(5)){
+    else if(controllerGuitar.getRawAxis(1) == 1.0){
       elevator.moveDown();
     }
     else{
