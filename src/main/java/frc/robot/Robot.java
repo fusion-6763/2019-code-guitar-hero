@@ -165,7 +165,7 @@ public class Robot extends TimedRobot {
     }
 
     // Elevator
-    if(controllerGuitar.getRawAxis(1) == 0.0){
+    if(controllerGuitar.getRawAxis(1) == -1.0){
       elevator.moveUp();
     }
     else if(controllerGuitar.getRawAxis(1) == 1.0){
