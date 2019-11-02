@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.Compressor;
 
 import frc.robot.HatchIntake.HatchState;
 
+import java.io.Console;
+
 import edu.wpi.first.cameraserver.*;
 
 /**
@@ -33,8 +35,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  Joystick guitar = new Joystick(0);
-  Joystick vroomStick = new Joystick(1);
+  Joystick controllerGuitar = new Joystick(0);
+  Joystick driverGuitar = new Joystick(1);
 
   DifferentialDrive myRobot = new DifferentialDrive(new Spark(0), new Spark(2));
 
@@ -117,23 +119,22 @@ public class Robot extends TimedRobot {
   private void periodicStuffs(){
     double zSpeed = 0.0;
     double ySpeed = 0.0;
-
+    System.out.println(driverGuitar.getPOV(0));
     double magicSpeed = 0.8;
-
-    if(guitar.getRawAxis(1) == 1.0){
+    if(driverGuitar.getPOV(0) == 180.0){
       zSpeed = magicSpeed;
     }
-    else if(guitar.getRawAxis(1) == -1.0){
+    else if(driverGuitar.getPOV(0) == 0){
       zSpeed = -magicSpeed;
     }
     else{
       zSpeed = 0.0;
     }
 
-    if(guitar.getRawButton(1)){
+    if(driverGuitar.getRawButton(1)){
       ySpeed = -magicSpeed;
     }
-    else if(guitar.getRawButton(6)){
+    else if(driverGuitar.getRawButton(4)){
       ySpeed = magicSpeed;
     }
     else{
@@ -143,7 +144,7 @@ public class Robot extends TimedRobot {
     myRobot.arcadeDrive(zSpeed, ySpeed);
 
     // Hatch stuff
-    if(guitar.getRawAxis(3) > 0.5){
+    if(controllerGuitar.getRawAxis(3) > 0.5){
       hatchState = HatchState.OUT;
       hatchIntake.set(hatchState);
     }
@@ -154,10 +155,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("hatchOut", hatchState == HatchState.OUT ? true : false);
 
     // Cargo
-    if(guitar.getRawButton(4)){
+    if(controllerGuitar.getRawButton(4)){
       cargoIntake.outtake();
     }
-    else if(guitar.getRawButton(2)){
+    else if(controllerGuitar.getRawButton(2)){
       cargoIntake.intake();
     }
     else{
@@ -165,10 +166,10 @@ public class Robot extends TimedRobot {
     }
 
     // Elevator
-    if(guitar.getRawButton(3)){
+    if(controllerGuitar.getRawButton(3)){
       elevator.moveUp();
     }
-    else if(guitar.getRawButton(5)){
+    else if(controllerGuitar.getRawButton(5)){
       elevator.moveDown();
     }
     else{
